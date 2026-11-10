@@ -55,3 +55,55 @@ main {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+
+/* Xhimi theme */
+body {
+  background-color: #f3efff;
+}
+
+.navbar.bg-dark {
+  background-color: #4c1d95 !important;
+}
+
+.btn-primary {
+  --bs-btn-bg: #7c3aed;
+  --bs-btn-border-color: #7c3aed;
+  --bs-btn-hover-bg: #6d28d9;
+  --bs-btn-hover-border-color: #6d28d9;
+  --bs-btn-active-bg: #5b21b6;
+  --bs-btn-active-border-color: #5b21b6;
+  --bs-btn-disabled-bg: #7c3aed;
+  --bs-btn-disabled-border-color: #7c3aed;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #7c3aed;
+  --bs-btn-border-color: #7c3aed;
+  --bs-btn-hover-bg: #7c3aed;
+  --bs-btn-hover-border-color: #7c3aed;
+  --bs-btn-active-bg: #6d28d9;
+  --bs-btn-active-border-color: #6d28d9;
+}
+
+.btn-outline-danger {
+  --bs-btn-color: #ea580c;
+  --bs-btn-border-color: #ea580c;
+  --bs-btn-hover-bg: #ea580c;
+  --bs-btn-hover-border-color: #ea580c;
+  --bs-btn-active-bg: #c2410c;
+  --bs-btn-active-border-color: #c2410c;
+}
+
+.btn {
+  border-radius: 999px;
+}
+
+.card {
+  border: 0;
+  border-radius: 1rem;
+}
+
+.stat-value {
+  color: #5b21b6;
+}
