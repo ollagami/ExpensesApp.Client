@@ -1,43 +1,79 @@
-let addBtn = document.getElementById("addExpenseBtn");
-addBtn.addEventListener("click", (event) => {
+const form = document.getElementById("expense-form");
+const recentCard = document.getElementById("recent");
+const recentList = document.getElementById("recent-list");
+const toast = document.getElementById("toast");
 
-    event.preventDefault();
+document.getElementById("date").valueAsDate = new Date();
 
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
 
-    let titleInput = document.getElementById('title').value;
-    let amountInput = document.getElementById('amount').value;
-    let categoryInput = document.getElementById('category').value;
-    let dateInput = document.getElementById('date').value;
+function getExpenses() {
+  try {
+    const data = JSON.parse(localStorage.getItem("expenses"));
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
 
-    console.log('titleInput - '+titleInput);
-    console.log('amnountInput - '+amountInput);
-    console.log('categoryInput - '+categoryInput);
-    console.log('dateInput - '+dateInput);
+function setError(field, message) {
+  const input = form.elements[field];
+  const box = form.querySelector('.error[data-for="' + field + '"]');
+  input.classList.toggle("is-invalid", !!message);
+  box.textContent = message || "";
+}
 
-    let expenseObj = {
-        title: titleInput,
-        amount: amountInput,
-        category: categoryInput,
-        date: dateInput
-    };
+function validate(expense) {
+  let valid = true;
+  const rules = {
+    title: expense.title.trim() === "" ? "Title is required." : "",
+    amount: !(Number(expense.amount) >= 1) ? "Amount must be at least 1." : "",
+    category: expense.category === "" ? "Please choose a category." : "",
+    date: expense.date === "" ? "Date is required." : ""
+  };
+  for (const field in rules) {
+    setError(field, rules[field]);
+    if (rules[field]) valid = false;
+  }
+  return valid;
+}
 
-    expenseObj.amount +=2;
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-    // console.log(expenseObj);
-    console.log('Objekti: '+ JSON.stringify(expenseObj));
+  const expense = {
+    id: Date.now(),
+    title: form.elements.title.value.trim(),
+    amount: Number(form.elements.amount.value),
+    category: form.elements.category.value,
+    date: form.elements.date.value
+  };
 
+  if (!validate(expense)) return;
 
-    localStorage.setItem('expenses', JSON.stringify(expenseObj));
+  const expenses = getExpenses();
+  expenses.push(expense);
+  localStorage.setItem("expenses", JSON.stringify(expenses));
 
-    let expesnseLocal = localStorage.getItem('expenses');
-    console.log('Data: '+ expesnseLocal);
-    console.log(JSON.parse(expesnseLocal));
+  const li = document.createElement("li");
+  li.className = "list-group-item d-flex justify-content-between";
+  li.textContent = expense.date + " - " + expense.title + " (" + expense.category + ")";
+  const amount = document.createElement("strong");
+  amount.textContent = expense.amount + " Lek";
+  li.appendChild(amount);
+  recentList.prepend(li);
+  recentCard.classList.remove("d-none");
 
+  form.reset();
+  document.getElementById("date").valueAsDate = new Date();
+  showToast("Expense added");
+});
 
-    let allExpenses = [];
-    for(let i=0; i<allExpenses.length; i++){
-        let expense = allExpenses[i];
-        console.log(expense.amount);
-    }
-
-})
+setInterval(() => {
+  const clock = document.getElementById("clock");
+  if (clock) clock.textContent = new Date().toLocaleTimeString();
+}, 1000);
